@@ -1,0 +1,43 @@
+<div class="container">
+    <form action="/user" method="post" class="mt-5 p-3 border">
+        <h2 class="text-center">Créer un user</h2>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" id="username" autofocus required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="text" class="form-control" name="email" id="email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" class="form-control" name="age" id="age" step="1" min="18" max="80" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Créer</button>
+    </form>
+
+    <table class="table table-bordered border-dark mt-5">
+        <thead class="table-dark text-center">
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let key in userMap) { %>
+                <tr>
+                    <th scope="row">1</th>
+                    <td><%= userMap[key].username %></td>
+                    <td><%= userMap[key].email %></td>
+                    <td><%= userMap[key].age %>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+</div>

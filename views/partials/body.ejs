@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Projet Node</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+</head>
+
+<body <% if (typeof toast !== 'undefined') { %> onload="toast()" <% } %>>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Projet Articles</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link <% if (page == 'index') { %>active<%}%>" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <% if (page == 'users') { %>active<%}%>" href="/users">Users</a>
+          </li>
+      </div>
+    </div>
+  </nav>
+
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" style="position: absolute; top: 55px; left: 0;">
+    <div class="toast-header">
+      <strong class="me-auto"><% if (typeof toast === 'object') { %>Erreur formulaire<% } else { %>Succès !<% } %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <% if (typeof toast === 'object') { %>
+      <ul>
+        <% for(var erreur in toast) { %>
+          <li><%= erreur + ': ' + toast[erreur] %></li>          
+        <% } %>
+      </ul>
+      <% } else { %>
+        <%= toast %> 
+      <% } %>
+    </div>
+  </div>
+
+  <%- include(`../${page}`); %>
+
+<script>
+  const option = {
+    animation: true,
+    delay: 5000000
+  }
+
+  function toast() {
+    const toast = document.querySelector('.toast')
+    const t = new bootstrap.Toast(toast, option)
+    t.show()
+  }
+</script>
+
+</body>
+</html>
