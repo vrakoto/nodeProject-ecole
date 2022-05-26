@@ -4,7 +4,6 @@ const {UserModel} = require('../models/User')
 module.exports = {
     getArticles: (req, res) => {
         ArticleModel.find({}, function(err, articles) {
-            console.log(req.session);
             if (err) {
                 return res.status(500).json({
                     message: err,
@@ -17,6 +16,7 @@ module.exports = {
             });
         
             res.render('../views/partials/body', {
+                toast: '',
                 page: "index",
                 articlesMap
             });
@@ -28,11 +28,11 @@ module.exports = {
             var userMap = {}
         
             users.forEach(function(user) {
-              userMap[user._id] = user;
+              userMap[user._id] = user
             })
         
             res.render('../views/partials/body', {
-                toast: req.session.toast,
+                toast: req.session.toast ?? '',
                 page: "users",
                 userMap
             });
@@ -41,11 +41,11 @@ module.exports = {
 
     createUser: (req, res) => {
         const result = req.body
-        const {username} = result;
-        const {email} = result;
-        const {age} = result;
+        const {username} = result
+        const {email} = result
+        const {age} = result
 
-        let erreurs = {};
+        let erreurs = {}
         for (let key in result) {
             const value = result[key]
             if (!value) {
@@ -53,7 +53,7 @@ module.exports = {
             }
         }
 
-        if (age < 18 || age > 80 || !Number.isInteger(age)) {
+        if (age < 18 || age > 80) {
             erreurs.age = "l'utilisateur doit être majeur et moins de 80 ans"
         }
 
@@ -63,18 +63,87 @@ module.exports = {
         }
 
         const user = new UserModel({username, email, age})
-        user.save((err, user) => {
+        user.save((err) => {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    general: "Internal Error",
+                    message: "Internal Error",
                     description: err,
                 }
-                return res.redirect('/users')
             } else {
                 req.session.toast = "User créé."
-                return res.redirect('/users')
             }
+            return res.redirect('/users')
         })
     },
+
+    getUser: (req, res) => {
+        const id = req.params.id
+
+        UserModel.findById(id, (err, user) => {
+            if (err) {
+                return res.status(500).json({
+                    status: 500,
+                    message: "Internal Error récupération de l'user",
+                    description: err,
+                })
+            }
+
+            if (!user) {
+                req.session.toast = {
+                    status: 404,
+                    message: "User introuvable"
+                }
+                return res.redirect('/users')
+            }
+
+            ArticleModel.find({author: id}, (err, articles) => {
+                if (err) {
+                    return res.status(500).json({
+                        status: 500,
+                        message: "Internal Error récupération des articles",
+                        description: err
+                    })
+                }
+    
+                if (!articles) {
+                    return res.status(500).json({
+                        status: 404,
+                        message: "Article introuvable"
+                    })
+                }
+
+                return res.render('../views/partials/body', {
+                    toast: req.session.toast ?? '',
+                    page: "user",
+                    user,
+                    articles
+                })
+            })
+        })
+    },
+
+    deleteUser: (req, res) => {
+        const id = req.params.id
+
+        UserModel.findByIdAndDelete(id, (err, user) => {
+            if (err) {
+                req.session.toast = {
+                    status: 500,
+                    message: "Internal Error",
+                    description: err,
+                }
+            }
+
+            if (!user) {
+                req.session.toast = {
+                    status: 404,
+                    message: "User introuvable"
+                }
+            } else {
+                req.session.toast = "User supprimé."
+            }
+            return res.redirect('/users')
+        })
+    }
 }

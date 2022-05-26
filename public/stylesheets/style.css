@@ -1,0 +1,41 @@
+.toast {
+  position: absolute;
+  top: 55px;
+  left: 0;
+}
+
+.erreur {
+  background-color: rgb(223, 68, 68);
+  color: #FFF;
+  font-weight: bold;
+}
+
+.deleteForm {
+  display: inline-block;
+}
+
+
+.widthCardUser {
+  width: 18rem;
+}
+
+#formArticle {
+  display: none;
+}
+
+#formArticle label {
+  margin-bottom: unset;
+}
+
+.toggle {
+  display: block !important;
+}
+
+
+#articlesAssocies {
+  display: none;
+}
+
+.unArticle {
+  width: 300px;
+}

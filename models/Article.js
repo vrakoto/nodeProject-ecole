@@ -1,9 +1,5 @@
 const { Schema, model } = require('mongoose')
 
-Author = new Schema({
-    name: String
-})
-
 Article = new Schema({
     title: String,
     description: String,
@@ -11,9 +7,7 @@ Article = new Schema({
 })
 
 const ArticleModel = model('Article', Article)
-const AuthorModel = model('Author', Author)
 
 module.exports = {
-    ArticleModel,
-    AuthorModel
+    ArticleModel
 }

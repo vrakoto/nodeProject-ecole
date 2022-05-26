@@ -3,17 +3,17 @@
         <h2 class="text-center">Créer un user</h2>
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" id="username" autofocus required>
+            <input type="text" class="form-control" name="username" id="username" autofocus>
         </div>
 
         <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
-            <input type="text" class="form-control" name="email" id="email" required>
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" name="email" id="email">
         </div>
 
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>
-            <input type="number" class="form-control" name="age" id="age" step="1" min="18" max="80" required>
+            <input type="number" class="form-control" name="age" id="age" step="1" min="18" max="80">
         </div>
 
         <button type="submit" class="btn btn-primary">Créer</button>
@@ -26,6 +26,7 @@
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
                 <th scope="col">Age</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -34,10 +35,15 @@
                     <th scope="row">1</th>
                     <td><%= userMap[key].username %></td>
                     <td><%= userMap[key].email %></td>
-                    <td><%= userMap[key].age %>
+                    <td><%= userMap[key].age %></td>
+                    <td class="text-center">
+                        <a class="btn btn-primary" href="/user/<%= userMap[key]._id %>">Voir</a>
+                        <form class="deleteForm" action="/deleteUser/<%= userMap[key]._id %>" method="post">
+                            <button class="btn btn-danger" type="submit">X</button>
+                        </form>
                     </td>
                 </tr>
-                <% } %>
+            <% } %>
         </tbody>
     </table>
 </div>
