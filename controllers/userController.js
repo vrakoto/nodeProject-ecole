@@ -9,16 +9,11 @@ module.exports = {
                     message: err,
                 });
             }
-            var articlesMap = {};
-        
-            articles.forEach(function(article) {
-                articlesMap[article._id] = article;
-            });
         
             res.render('../views/partials/body', {
                 toast: '',
                 page: "index",
-                articlesMap
+                articles
             });
         });
     },

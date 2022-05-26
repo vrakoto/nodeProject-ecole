@@ -11,8 +11,7 @@ router.route('/deleteUser/:id').post(userController.deleteUser);
 
 router.route('/article/:id').get(authorController.getArticle);
 router.route('/article').post(authorController.createArticle);
-// router.route('/deleteArticle/:id').post(authorController.deleteArticle);
-
-
+router.route('/editArticle/:id').post(authorController.editArticle);
+router.route('/deleteArticle/:id').post(authorController.deleteArticle);
 
 module.exports = router;

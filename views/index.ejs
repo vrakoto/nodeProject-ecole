@@ -1,0 +1,15 @@
+<h1 class="text-center mt-5">Les articles</h1>
+<div class="d-flex justify-content-evenly align-items-center flex-wrap mt-5">
+    <% articles.forEach(article => { %>
+        <div class="mt-3 card unArticle">
+            <div class="card-body text-center">
+                <h3 class="card-title mb-0"><%= article.title %></h3>
+                <p><%= article.description %></p>
+                <hr>
+                <div class="d-flex justify-content-evenly">
+                    <a href="/article/<%= article._id %>" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></a>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>

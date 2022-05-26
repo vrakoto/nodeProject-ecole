@@ -14,7 +14,7 @@
     <br>
 
     <label for="author" class="form-label">ID Auteur (actuel)</label>
-    <input type="text" class="form-control" value="<%= user._id %>" name="author" id="author">
+    <input type="text" class="form-control" value="<%= user._id %>" name="author" id="author" readonly>
 
     <button class="btn btn-success mt-3">Créer</button>
 </form>
@@ -47,8 +47,10 @@
                     <small class="text-muted"># <%= article._id %></small>
                     <hr>
                     <div class="d-flex justify-content-evenly">
-                        <a href="/article/<%= article._id %>" class="btn btn-secondary">Voir l'article</a>
-                        <a href="/deleteArticle/<%= article._id %>" class="btn btn-danger">Supprimer</a>
+                        <a href="/article/<%= article._id %>" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        <form action="/deleteArticle/<%= article._id %>" method="post">
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>

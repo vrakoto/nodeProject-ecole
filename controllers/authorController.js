@@ -3,11 +3,10 @@ const { UserModel } = require('../models/User')
 
 module.exports = {
     getArticle: (req, res) => {
-        const id = req.params.id // recupere id article
+        const idArticle = req.params.id
+        let userFound = true
 
-        ArticleModel.findById(id, (err, article) => { // verifie si article existant
-            const idAuthor = article.author
-
+        ArticleModel.findById(idArticle, (err, article) => {
             if (err) {
                 return res.status(500).json({
                     status: 500,
@@ -24,7 +23,7 @@ module.exports = {
             }
 
             // On vérifie si l'user existe dans la BDD
-            UserModel.findById(idAuthor, (err, user) => {
+            UserModel.findById(article.author, (err, user) => {
                 if (err) {
                     return res.status(500).json({
                         status: 500,
@@ -34,23 +33,26 @@ module.exports = {
                 }
     
                 if (!user) {
-                    return res.status(404).json({
-                        status: 404,
-                        message: "Utilisateur inexistant"
-                    })
+                    article = {
+                        _id: article._id,
+                        title: article.title,
+                        description: article.description,
+                        author: 'Utilisateur inexistant'
+                    }
+                    userFound = false
                 }
 
                 return res.render('../views/partials/body', {
                     toast: req.session.toast ?? '',
                     page: "article",
-                    article
+                    article,
+                    userFound
                 });
             })
         })
     },
 
     createArticle: (req, res) => {
-        console.log(req.params);
         const result = req.body
         const { title } = result
         const { description } = result
@@ -89,4 +91,45 @@ module.exports = {
             return res.redirect(userPage)
         })
     },
+
+    editArticle: (req, res) => {
+        const idArticle = req.params.id
+        const {title} = req.body
+        const {description} = req.body
+        const {author} = req.body
+
+        ArticleModel.findByIdAndUpdate(idArticle,
+            {
+                title: title,
+                description: description
+            },
+        (err) => {
+            if (err) {
+                return res.status(500).json({
+                    status: 500,
+                    general: "Internal error lors de l'update de l'article",
+                    description: err
+                })
+            }
+            req.session.toast = "Article modifié !"
+            return res.redirect('back')
+        })
+    },
+
+    deleteArticle: (req, res) => {
+        const idArticle = req.params.id
+
+        ArticleModel.findByIdAndDelete(idArticle, (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    status: 500,
+                    general: "Internal error suppression de l'article",
+                    description: err
+                })
+            }
+
+            req.session.toast = "Article supprimé."
+            return res.redirect(`/user/${result.author}`)
+        })
+    }
 }
