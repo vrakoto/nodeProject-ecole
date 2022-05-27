@@ -2,6 +2,8 @@ const {AuthorModel, ArticleModel } = require('../models/Article')
 const {UserModel} = require('../models/User')
 
 module.exports = {
+
+    // pour la page home
     getArticles: (req, res) => {
         ArticleModel.find({}, function(err, articles) {
             if (err) {
@@ -11,7 +13,7 @@ module.exports = {
             }
         
             res.render('../views/partials/body', {
-                toast: '',
+                toast: req.session.toast ?? '',
                 page: "index",
                 articles
             });
@@ -60,51 +62,46 @@ module.exports = {
         const user = new UserModel({username, email, age})
         user.save((err) => {
             if (err) {
-                req.session.toast = {
+                return res.status(500).json({
                     status: 500,
                     message: "Internal Error",
                     description: err,
-                }
-            } else {
-                req.session.toast = "User créé."
+                })
             }
+
+            req.session.toast = "User créé."
             return res.redirect('/users')
         })
     },
 
+
+    // contient également les articles associés
     getUser: (req, res) => {
         const id = req.params.id
 
         UserModel.findById(id, (err, user) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast ={
                     status: 500,
-                    message: "Internal Error récupération de l'user",
+                    message: "Internal Error lors de la récupération de l'user",
                     description: err,
-                })
-            }
-
-            if (!user) {
+                }
+                return res.redirect('/users')
+            } else if (!user) {
                 req.session.toast = {
                     status: 404,
-                    message: "User introuvable"
+                    message: "User inexistant"
                 }
                 return res.redirect('/users')
             }
 
+            // articles associés à l'user
             ArticleModel.find({author: id}, (err, articles) => {
                 if (err) {
                     return res.status(500).json({
                         status: 500,
-                        message: "Internal Error récupération des articles",
+                        message: "Internal Error lors de la récupération des articles de cet utilisateur",
                         description: err
-                    })
-                }
-    
-                if (!articles) {
-                    return res.status(500).json({
-                        status: 404,
-                        message: "Article introuvable"
                     })
                 }
 
@@ -123,21 +120,21 @@ module.exports = {
 
         UserModel.findByIdAndDelete(id, (err, user) => {
             if (err) {
-                req.session.toast = {
+                return res.status(500).json({
                     status: 500,
                     message: "Internal Error",
                     description: err,
-                }
+                })
             }
 
             if (!user) {
-                req.session.toast = {
+                return res.status(500).json({
                     status: 404,
                     message: "User introuvable"
-                }
-            } else {
-                req.session.toast = "User supprimé."
+                })
             }
+            
+            req.session.toast = "User supprimé."
             return res.redirect('/users')
         })
     }

@@ -18,7 +18,7 @@ module.exports = {
             if (!article) {
                 return res.status(404).json({
                     status: 404,
-                    message: "Article introuvable"
+                    message: "Article inexistant"
                 })
             }
 
@@ -59,7 +59,6 @@ module.exports = {
         const { author } = result
 
         let erreurs = {}
-        const userPage = `/user/${author}` // renvoie vers "getUser" du controller "userController"
 
         for (const [key, value] of Object.entries(result)) {
             if (value.trim() === '') {
@@ -69,26 +68,21 @@ module.exports = {
 
         req.session.toast = erreurs
         if (Object.entries(erreurs).length > 0) {
-            return res.redirect(userPage)
+            return res.redirect(`/user/${author}`)
         }
 
-        UserModel.findById(author, (err, user) => {
-            // les erreurs liés à la recherche de l'user sont déjà gérés par la méthode "getUser" du controller "userController"
-            
-            if (user) {
-                const user = new ArticleModel({title, description, author})
-                try {
-                    user.save()
-                    req.session.toast = "Article créé."
-                } catch (error) {
-                    return res.status(500).json({
-                        status: 500,
-                        message: "Internal Error",
-                        error
-                    })
-                }
+        const article = new ArticleModel({title, description, author})
+        article.save((err) => {
+            if (err) {
+                return res.status(500).json({
+                    status: 500,
+                    message: "Internal Error",
+                    error
+                })
+            } else {
+                req.session.toast = "Article créé."
+                return res.redirect('back')
             }
-            return res.redirect(userPage)
         })
     },
 
@@ -129,7 +123,13 @@ module.exports = {
             }
 
             req.session.toast = "Article supprimé."
-            return res.redirect(`/user/${result.author}`)
+            UserModel.findById(result.author, (err, user) => {
+                if (!user) {
+                    return res.redirect('/')
+                } else {
+                    return res.redirect(`/user/${result.author}`)
+                }
+            })
         })
     }
 }

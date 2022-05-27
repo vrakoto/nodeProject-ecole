@@ -31,16 +31,14 @@
         </thead>
         <tbody>
             <% for (let key in userMap) { %>
-                <tr>
-                    <th scope="row">1</th>
+                <tr class="text-center">
+                    <th scope="row"><small class="text-muted"><%= userMap[key]._id %></small></th>
                     <td><%= userMap[key].username %></td>
                     <td><%= userMap[key].email %></td>
                     <td><%= userMap[key].age %></td>
                     <td class="text-center">
                         <a class="btn btn-primary" href="/user/<%= userMap[key]._id %>"><i class="fa-solid fa-magnifying-glass"></i></a>
-                        <form class="deleteForm" action="/deleteUser/<%= userMap[key]._id %>" method="post">
-                            <button class="btn btn-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
-                        </form>
+                        <a class="btn btn-danger" href="/deleteUser/<%= userMap[key]._id %>"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
             <% } %>

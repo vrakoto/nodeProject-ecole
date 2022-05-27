@@ -1,27 +1,35 @@
-<form action="/editerArticle/<%= article._id %>" method="post" class="card widthCardUser m-auto mt-3 p-3">
-    <div class="mb-3">
-        <label for="title" class="form-label">Titre</label>
-        <input type="text" class="form-control" value="<%= article.title %>" name="title" id="title" readonly>
+<form action="/editArticle/<%= article._id %>" method="post" class="card widthCardUser m-auto mt-3">
+
+    <div class="card-header text-center">
+        <h4 class="card-title mb-0">Fiche Article</h4>
     </div>
 
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" name="description" id="description" readonly><%= article.description %></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label for="author" class="form-label">ID Auteur (actuel)</label>
-        <div class="d-flex justify-content-between">
-            <input type="text" class="form-control" value="<%= article.author %>" name="author" id="author" readonly>
-            <% if (userFound === true) { %>
-                <a href="/user/<%= article.author %>" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <% } %>
+    <div class="p-3">
+        <div class="mb-3">
+            <label for="title" class="form-label">Titre</label>
+            <input type="text" class="form-control" value="<%= article.title %>" name="title" id="title" readonly>
         </div>
-    </div>
+    
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" name="description" id="description" readonly><%= article.description %></textarea>
+        </div>
+    
+        <div class="mb-3">
+            <label for="author" class="form-label">ID Auteur (actuel)</label>
+            <div class="d-flex justify-content-between">
+                <input type="text" class="form-control" value="<%= article.author %>" name="author" id="author" readonly>
+                <% if (userFound === true) { %>
+                    <a href="/user/<%= article.author %>" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></a>
+                <% } %>
+            </div>
+        </div>
+    
+        <a class="d-block btn btn-primary mt-3 btnSwitchInArticle" onclick="editFormArticle(this)" id="btnToggleEditFormArticle">Faire une modif</a>
+        <button class="btn btn-success mt-3 btnSwitchInArticle" type="submit" id="btnEditArticle"><i class="fa-solid fa-pen-to-square"></i></button>
 
-    <a class="btn btn-primary mt-3" onclick="editFormArticle(this)" id="btnToggleEditFormArticle">Faire une modif</a>
-    <button class="btn btn-success mt-3" type="submit" id="btnEditArticle"><i class="fa-solid fa-pen-to-square"></i></button>
-    <a href="/deleteArticle/<%= article._id %>" class="btn btn-danger mt-2"><i class="fa-solid fa-trash"></i></a>
+        <a href="/deleteArticle/<%= article._id %>" class="d-block btn btn-danger mt-2"><i class="fa-solid fa-trash"></i></a>
+    </div>
 </form>
 
 <script src="/javascript/article.js"></script>

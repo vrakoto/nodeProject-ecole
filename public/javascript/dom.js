@@ -1,6 +1,6 @@
 const option = {
     animation: true,
-    delay: 5000000
+    delay: 5000
 }
 
 function toast() {

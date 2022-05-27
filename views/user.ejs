@@ -2,33 +2,34 @@
     <button class="btn btn-primary mt-5" id="btnToggleFormArticle" onclick="toggleArticleForm()"></button>
 </div>
 
-<form action="/article" method="post" class="card widthCardUser m-auto mt-3 p-3" id="formArticle">
-    <label for="title" class="form-label">Titre</label>
-    <input type="text" class="form-control" name="title" id="title">
+<form action="/article" method="post" class="card widthCardUser m-auto mt-3" id="formArticle">
 
-    <br>
+    <div class="card-header text-center">
+        <h4 class="card-title mb-0">Création d'un article</h4>
+    </div>
+    
+    <div class="p-3">
+        <label for="title" class="form-label">Titre</label>
+        <input type="text" class="form-control" name="title" id="title">
 
-    <label for="description" class="form-label">Description</label>
-    <input type="text" class="form-control" name="description" id="description">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" class="form-control" name="description" id="description">
 
-    <br>
+        <label for="author" class="form-label">ID Auteur (actuel)</label>
+        <input type="text" class="form-control" value="<%= user._id %>" name="author" id="author" readonly>
 
-    <label for="author" class="form-label">ID Auteur (actuel)</label>
-    <input type="text" class="form-control" value="<%= user._id %>" name="author" id="author" readonly>
-
-    <button class="btn btn-success mt-3">Créer</button>
+        <button class="btn btn-success mt-3">Créer</button>
+    </div>
 </form>
 
 <div class="card widthCardUser m-auto mt-3">
-    <div class="card-body">
-        <p class="card-text">Username: <%= user.username %>
-        </p>
+    <div class="card-header text-center">
+        <h4 class="card-title mb-0">Information de l'user</h4>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">Email: <%= user.email %>
-        </li>
-        <li class="list-group-item">Age: <%= user.age %>
-        </li>
+        <li class="list-group-item">Username: <%= user.username %></li>
+        <li class="list-group-item">Email: <%= user.email %></li>
+        <li class="list-group-item">Age: <%= user.age %></li>
     </ul>
 
     <div class="card-body text-center">
@@ -48,14 +49,11 @@
                     <hr>
                     <div class="d-flex justify-content-evenly">
                         <a href="/article/<%= article._id %>" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></a>
-                        <form action="/deleteArticle/<%= article._id %>" method="post">
-                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
-                        </form>
+                        <a class="btn btn-danger" href="/deleteArticle/<%= article._id %>"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </div>
             </div>
         <% }) %>
-        
     </div>
 </div>
 

@@ -1,0 +1,13 @@
+<div class="toast error" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+    <div class="toast-header">
+        <strong class="me-auto">Erreur</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        <ul>
+        <% for(var erreur in toast) { %>
+            <li><%= erreur + ': ' + toast[erreur] %></li>
+        <% } %>
+        </ul>
+    </div>
+</div>

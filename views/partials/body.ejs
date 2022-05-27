@@ -33,24 +33,18 @@
     </div>
   </nav>
 
-  <% if (toast !== '') { %> 
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
-      <div class="toast-header">
-        <strong class="me-auto"><% if (typeof toast === 'object') { %>Erreur formulaire<% } else { %>Succès !<% } %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-        <% if (typeof toast === 'object') { %>
-        <ul>
-          <% for(var erreur in toast) { %>
-            <li><%= erreur + ': ' + toast[erreur] %></li>
-          <% } %>
-        </ul>
-        <% } else { %>
-          <%= toast %> 
-        <% } %>
-      </div>
-    </div>
+  <% if (toast !== '') { %>
+
+    <% if (typeof toast === 'object') { %> 
+
+        <%- include('./toastError'); %>
+
+    <% } else { %>
+      
+        <%- include('./toastSuccess'); %>
+
+    <% } %>
+
   <% } %>
 
   <%- include(`../${page}`); %>

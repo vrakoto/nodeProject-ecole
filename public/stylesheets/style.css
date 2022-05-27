@@ -2,20 +2,41 @@ form label {
   margin-bottom: unset !important;
 }
 
+form label:not(:first-child) {
+  margin-top: 20px;
+}
+
+.toggle {
+  display: block !important;
+}
+
 .toast {
   position: absolute;
   top: 55px;
   left: 0;
 }
 
-.erreur {
-  background-color: rgb(223, 68, 68);
+.success {
+  background-color: #4BCA81;
   color: #FFF;
-  font-weight: bold;
+  width: 200px;
 }
 
-.deleteForm {
-  display: inline-block;
+.error {
+  background-color: #ff0033;
+  color: #FFF;
+}
+
+
+.toast-header {
+  background-color: unset;
+  color: #FFF;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.toast-body {
+  font-weight: bold;
 }
 
 
@@ -27,13 +48,6 @@ form label {
   display: none;
 }
 
-
-
-.toggle {
-  display: block !important;
-}
-
-
 #articlesAssocies {
   display: none;
 }
@@ -43,6 +57,7 @@ form label {
 }
 
 
-#btnEditArticle {
+.btnSwitchInArticle {
   display: none;
+  width: 100%;
 }
