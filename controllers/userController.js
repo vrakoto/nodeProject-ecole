@@ -7,9 +7,9 @@ module.exports = {
     getArticles: (req, res) => {
         ArticleModel.find({}, function(err, articles) {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     message: err,
-                });
+                }
             }
         
             res.render('../views/partials/body', {
@@ -62,11 +62,11 @@ module.exports = {
         const user = new UserModel({username, email, age})
         user.save((err) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     message: "Internal Error",
                     description: err,
-                })
+                }
             }
 
             req.session.toast = "User créé."
@@ -98,11 +98,11 @@ module.exports = {
             // articles associés à l'user
             ArticleModel.find({author: id}, (err, articles) => {
                 if (err) {
-                    return res.status(500).json({
+                    req.session.toast = {
                         status: 500,
                         message: "Internal Error lors de la récupération des articles de cet utilisateur",
                         description: err
-                    })
+                    }
                 }
 
                 return res.render('../views/partials/body', {
@@ -120,18 +120,18 @@ module.exports = {
 
         UserModel.findByIdAndDelete(id, (err, user) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     message: "Internal Error",
                     description: err,
-                })
+                }
             }
 
             if (!user) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 404,
                     message: "User introuvable"
-                })
+                }
             }
             
             req.session.toast = "User supprimé."

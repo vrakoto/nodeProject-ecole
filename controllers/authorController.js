@@ -8,28 +8,28 @@ module.exports = {
 
         ArticleModel.findById(idArticle, (err, article) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     message: "Internal Error récupération de l'article",
                     description: err,
-                })
+                }
             }
 
             if (!article) {
-                return res.status(404).json({
+                req.session.toast = {
                     status: 404,
                     message: "Article inexistant"
-                })
+                }
             }
 
             // On vérifie si l'user existe dans la BDD
             UserModel.findById(article.author, (err, user) => {
                 if (err) {
-                    return res.status(500).json({
+                    req.session.toast = {
                         status: 500,
                         message: "Internal Error récupération de l'user",
                         description: err,
-                    })
+                    }
                 }
     
                 if (!user) {
@@ -74,11 +74,11 @@ module.exports = {
         const article = new ArticleModel({title, description, author})
         article.save((err) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     message: "Internal Error",
                     error
-                })
+                }
             } else {
                 req.session.toast = "Article créé."
                 return res.redirect('back')
@@ -99,11 +99,11 @@ module.exports = {
             },
         (err) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     general: "Internal error lors de l'update de l'article",
                     description: err
-                })
+                }
             }
             req.session.toast = "Article modifié !"
             return res.redirect('back')
@@ -115,11 +115,11 @@ module.exports = {
 
         ArticleModel.findByIdAndDelete(idArticle, (err, result) => {
             if (err) {
-                return res.status(500).json({
+                req.session.toast = {
                     status: 500,
                     general: "Internal error suppression de l'article",
                     description: err
-                })
+                }
             }
 
             req.session.toast = "Article supprimé."
