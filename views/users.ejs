@@ -19,6 +19,9 @@
         <button type="submit" class="btn btn-primary">Créer</button>
     </form>
 
+    <% if (Object.entries(userMap).length === 0) { %>
+        <h2 class="mt-5 text-center">Aucun user</h2>
+    <% } else { %>
     <table class="table table-bordered border-dark mt-5">
         <thead class="table-dark text-center">
             <tr>
@@ -44,4 +47,5 @@
             <% } %>
         </tbody>
     </table>
+    <% } %>
 </div>

@@ -1,4 +1,9 @@
-<h1 class="text-center mt-5">Les articles</h1>
+<% if (articles.length === 0) { %>
+    <h1 class="mt-5 text-center">Aucun article</h1>
+<% } else { %>
+    <h1 class="text-center mt-5">Les articles</h1>
+<% } %>
+
 <div class="d-flex justify-content-evenly align-items-center flex-wrap mt-5">
     <% articles.forEach(article => { %>
         <div class="mt-3 card unArticle">

@@ -1,16 +1,16 @@
-const { ArticleModel } = require('../models/Article')
-const { UserModel } = require('../models/User')
+const ArticleModel = require('../models/Article')
+const UserModel = require('../models/User')
 
 module.exports = {
     getArticle: (req, res) => {
         const idArticle = req.params.id
-        let userFound = true
+        let userFound = ''
 
         ArticleModel.findById(idArticle, (err, article) => {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    message: "Internal Error récupération de l'article",
+                    message: "Internal Error while getting the article",
                     description: err,
                 }
             }
@@ -18,7 +18,7 @@ module.exports = {
             if (!article) {
                 req.session.toast = {
                     status: 404,
-                    message: "Article inexistant"
+                    message: "Article doesn't exist"
                 }
             }
 
@@ -27,7 +27,7 @@ module.exports = {
                 if (err) {
                     req.session.toast = {
                         status: 500,
-                        message: "Internal Error récupération de l'user",
+                        message: "Internal Error while verifying the user's ID",
                         description: err,
                     }
                 }
@@ -37,9 +37,10 @@ module.exports = {
                         _id: article._id,
                         title: article.title,
                         description: article.description,
-                        author: 'Utilisateur inexistant'
+                        author: "User inexistant"
                     }
-                    userFound = false
+                } else {
+                    userFound = user.username
                 }
 
                 return res.render('../views/partials/body', {
@@ -53,14 +54,11 @@ module.exports = {
     },
 
     createArticle: (req, res) => {
-        const result = req.body
-        const { title } = result
-        const { description } = result
-        const { author } = result
+        const {title, description, author} = req.body
 
         let erreurs = {}
 
-        for (const [key, value] of Object.entries(result)) {
+        for (const [key, value] of Object.entries(req.body)) {
             if (value.trim() === '') {
                 erreurs[key] = 'le champ est vide'
             }
@@ -76,11 +74,11 @@ module.exports = {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    message: "Internal Error",
+                    message: "Internal Error while creating the article",
                     error
                 }
             } else {
-                req.session.toast = "Article créé."
+                req.session.toast = "Article created."
                 return res.redirect('back')
             }
         })
@@ -88,9 +86,7 @@ module.exports = {
 
     editArticle: (req, res) => {
         const idArticle = req.params.id
-        const {title} = req.body
-        const {description} = req.body
-        const {author} = req.body
+        const {title, description, author} = req.body
 
         ArticleModel.findByIdAndUpdate(idArticle,
             {
@@ -101,11 +97,11 @@ module.exports = {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    general: "Internal error lors de l'update de l'article",
+                    general: "Internal error while updating the article",
                     description: err
                 }
             }
-            req.session.toast = "Article modifié !"
+            req.session.toast = "Article updated."
             return res.redirect('back')
         })
     },
@@ -117,12 +113,12 @@ module.exports = {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    general: "Internal error suppression de l'article",
+                    general: "Internal error while deleting the article",
                     description: err
                 }
             }
 
-            req.session.toast = "Article supprimé."
+            req.session.toast = "Article deleted."
             UserModel.findById(result.author, (err, user) => {
                 if (!user) {
                     return res.redirect('/')

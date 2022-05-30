@@ -1,5 +1,5 @@
-const {AuthorModel, ArticleModel } = require('../models/Article')
-const {UserModel} = require('../models/User')
+const ArticleModel = require('../models/Article')
+const UserModel = require('../models/User')
 
 module.exports = {
 
@@ -37,14 +37,11 @@ module.exports = {
     },
 
     createUser: (req, res) => {
-        const result = req.body
-        const {username} = result
-        const {email} = result
-        const {age} = result
+        const {username, email, age} = req.body
 
         let erreurs = {}
-        for (let key in result) {
-            const value = result[key]
+        for (let key in req.body) {
+            const value = req.body[key]
             if (!value) {
                 erreurs[key] = 'le champ est vide'
             }
@@ -64,12 +61,12 @@ module.exports = {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    message: "Internal Error",
+                    message: "Internal Error while creating the user",
                     description: err,
                 }
             }
 
-            req.session.toast = "User créé."
+            req.session.toast = "User created."
             return res.redirect('/users')
         })
     },
@@ -83,14 +80,14 @@ module.exports = {
             if (err) {
                 req.session.toast ={
                     status: 500,
-                    message: "Internal Error lors de la récupération de l'user",
+                    message: "Internal Error while getting the user",
                     description: err,
                 }
                 return res.redirect('/users')
             } else if (!user) {
                 req.session.toast = {
                     status: 404,
-                    message: "User inexistant"
+                    message: "User doesn't exist"
                 }
                 return res.redirect('/users')
             }
@@ -100,7 +97,7 @@ module.exports = {
                 if (err) {
                     req.session.toast = {
                         status: 500,
-                        message: "Internal Error lors de la récupération des articles de cet utilisateur",
+                        message: "Internal Error while getting the user's articles",
                         description: err
                     }
                 }
@@ -122,7 +119,7 @@ module.exports = {
             if (err) {
                 req.session.toast = {
                     status: 500,
-                    message: "Internal Error",
+                    message: "Internal Error while deleting the user",
                     description: err,
                 }
             }
@@ -130,11 +127,11 @@ module.exports = {
             if (!user) {
                 req.session.toast = {
                     status: 404,
-                    message: "User introuvable"
+                    message: "User doesn't exist"
                 }
             }
             
-            req.session.toast = "User supprimé."
+            req.session.toast = "User deleted."
             return res.redirect('/users')
         })
     }
